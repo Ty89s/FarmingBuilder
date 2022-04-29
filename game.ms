@@ -1,33 +1,49 @@
-text.clear
+//text.clear
 import "listUtil"
 /////////////////////////////////////////////////////////////////////
 // This is the display setting section.                           //
 display(0).mode = displayMode.text //Sets display 0 as text mode.//
-display(1).mode = displayMode.text                             //
-display(3).mode = displayMode.sprite                         //
-display(5).mode = displayMode.sprite                       //
-display(6).mode = displayMode.sprite                     //
-display(7).mode = displayMode.sprite                   //
-//////////////////////////////////////////////////////////////
-// Giveing a referance to it as cdp - chat display.        //
-//cdp = display(0)
-text = display(0)                                       //
-// Giveing a referance to it as ldp - labels display.      //
-//ldp = display(1)                                           //   
-// Giveing a referance to it as uidp - ui display.         //
-uidp = display(3)                                          //
-// Giveing a referance to it as pdp - players display.     //
-//pdp = display(5)                                           //
-// Giveing a referance to it as ddp - decaration display.  //
-//ddp = display(6)                                         //
-// Giveing a referance to it as sdp - scenery display. //
-//sdp = display(7)                                     //
-// Giveing a referance to it as mdp - map display. //
-//mdp = display(8)                                 //
-/////////////////////////////////////////////////
-//aop = {}
-ui = {}
+//display(1).mode = displayMode.text                             //
+display(3).mode = displayMode.sprite
+display(5).mode = displayMode.tile                         //
+display(6).mode = displayMode.pixel                       //
 
+                    //
+////////////////////////////////////////////////////
+// Giveing a referance to it as cdp - chat display.
+//cdp = display(0)
+text = display(0)
+// Giveing a referance to it as ldp - labels display.
+//ldp = display(0)
+// Giveing a referance to it as uidp - ui display.
+uidp = display(3)
+// Giveing a referance to it as cdp - Charecter Display.
+//cdp = display(5)
+// Giveing a referance to it as gdp - Grid Display.
+//gdp = display(5)
+// Giveing a referance to it as mdp - Tile Display.
+
+tdp = display(5)
+gfx = display(6)                      
+////////////////////////////////////////////////////////////
+aop = {}
+aop.map = function
+	tdp.tileSet = file.loadImage("/usr/Assets/tile set.png")
+	tdp.tileSetTileSize = 64
+	tdp.extent = [15, 10]  // columns, rows on screen
+	tdp.clear 4
+	
+	tdp.setCell 4, 0, 1
+	tdp.setCell 5, 0, 1
+	tdp.setCell 6, 0, 1
+	tdp.setCell 5, 1, 1
+	tdp.setCell 14, 9, 1
+	tdp.setCell 13, 9, 1
+	tdp.setCell 12, 9, 1
+	tdp.setCell 14, 9, 1
+end function
+
+ui = {}
 ui.main = function
 	health_bar_200 = new Sprite
 	health_bar_200.image = file.loadImage("/usr/Assets/UiWidgets/HealthBar/healthbar200.png")
@@ -67,7 +83,22 @@ ui.main = function
 		end if
 	end function
 	uidp.sprites.push ttb
-	
+end function
+ui.sb = function
+	sb = new Sprite
+	sb.image = file.loadImage("/usr/Assets/UiWidgets/settings.png")
+	sb.x = 20; sb.y = 600
+	sb.localBounds = new Bounds 
+	sb.localBounds.width = sb.image.width 
+	sb.localBounds.height = sb.image.height
+	sb.check_mouse = function
+		if self.contains(mouse) and mouse.button then
+			ui.menu
+		end if
+	end function
+	uidp.sprites.push sb
+end function
+ui.invb = function
 	invb = new Sprite
 	invb.image = file.loadImage("/usr/Assets/UiWidgets/inventoryicon.png")
 	invb.x = 45; invb.y = 600
@@ -80,7 +111,8 @@ ui.main = function
 		end if
 	end function
 	uidp.sprites.push invb
-	
+end function
+ui.pstatsb = function
 	pstatsb = new Sprite
 	pstatsb.image = file.loadImage("/usr/Assets/UiWidgets/playerstats.png")
 	pstatsb.x = 95; pstatsb.y = 600
@@ -93,7 +125,8 @@ ui.main = function
 		end if
 	end function
 	uidp.sprites.push pstatsb
-	
+end function
+ui.stb = function
 	stb = new Sprite
 	stb.image = file.loadImage("/usr/Assets/UiWidgets/skillsbutton.png")
 	stb.x = 120; stb.y = 600
@@ -107,8 +140,48 @@ ui.main = function
 	end function
 	uidp.sprites.push stb
 end function
-
-
+ui.sgb = function
+	sgb = new Sprite
+	sgb.image = file.loadImage("/usr/Assets/UiWidgets/smallgridbutton.png")
+	sgb.x = 740; sgb.y = 100
+	sgb.localBounds = new Bounds 
+	sgb.localBounds.width = sgb.image.width 
+	sgb.localBounds.height = sgb.image.height
+	sgb.check_mouse = function
+		if self.contains(mouse) and mouse.button then
+			grid.sg
+		end if
+	end function
+	uidp.sprites.push sgb
+end function
+ui.bgb = function
+	bgb = new Sprite
+	bgb.image = file.loadImage("/usr/Assets/UiWidgets/biggridbutton.png")
+	bgb.x = 745; bgb.y = 70
+	bgb.localBounds = new Bounds 
+	bgb.localBounds.width = bgb.image.width 
+	bgb.localBounds.height = bgb.image.height
+	bgb.check_mouse = function
+		if self.contains(mouse) and mouse.button then
+			grid.bg
+		end if
+	end function
+	uidp.sprites.push bgb
+end function
+ui.lb = function
+	lb = new Sprite
+	lb.image = file.loadImage("/usr/Assets/UiWidgets/lables.png")
+	lb.x = 758; lb.y = 40
+	lb.localBounds = new Bounds 
+	lb.localBounds.width = lb.image.width 
+	lb.localBounds.height = lb.image.height
+	lb.check_mouse = function
+		if self.contains(mouse) and mouse.button then
+			ui.lables
+		end if
+	end function
+	uidp.sprites.push lb	
+end function							
 ui.techtree = function
 	tt = new Sprite
 	tt.image = file.loadImage("/usr/Assets/UiWidgets/techtree.png")
@@ -127,7 +200,7 @@ ui.techtree = function
 			uidp.sprites.removeVal tt
 		end if
 	end function
-	uidp.sprites.push xbutton
+	uidp.sprites.push xbutton 
 end function
 ui.smallinv = function
 	// This is the iventory Section. Small, Medium sizes.
@@ -170,7 +243,15 @@ ui.pstats = function
 	end function
 	uidp.sprites.push xbutton
 end function
+aop.map
 ui.main
+ui.lb
+ui.sgb
+ui.bgb
+ui.stb
+ui.pstatsb
+ui.sb
+ui.invb
 while true
 	yield
 	for ui_item in uidp.sprites
