@@ -1,32 +1,169 @@
+////////////////////////////////////
+// Clearing the text display.   //
+////////////////////////////////
 //text.clear
+/////////////////////////////////////
+//  Text display set to white.   //
+/////////////////////////////////
+text.color = color.white
+/////////////////////////
+// Imported files.   //
+/////////////////////
 import "listUtil"
-/////////////////////////////////////////////////////////////////////
-// This is the display setting section.                           //
-display(0).mode = displayMode.text //Sets display 0 as text mode.//
-//display(1).mode = displayMode.text                             //
+/////////////////////////////////////////////
+// This is the display setting section.   //
+//////////////////////////////////////////
+display(0).mode = displayMode.text //Sets display 0 as text mode.                          //
 display(3).mode = displayMode.sprite
-display(5).mode = displayMode.tile                         //
-display(6).mode = displayMode.pixel                       //
+//display(4).mode = displayMode.pixel
+display(5).mode = displayMode.tile 
+///////////////////////////
+text = display(0)       //  Text Info.
+uidp = display(3)       //  Gui Info.
+//pdp = display(4)      //  Pixel Info.
+tdp = display(5)        //  Map Info
 
-                    //
-////////////////////////////////////////////////////
-// Giveing a referance to it as cdp - chat display.
-//cdp = display(0)
-text = display(0)
-// Giveing a referance to it as ldp - labels display.
-//ldp = display(0)
-// Giveing a referance to it as uidp - ui display.
-uidp = display(3)
-// Giveing a referance to it as cdp - Charecter Display.
-//cdp = display(5)
-// Giveing a referance to it as gdp - Grid Display.
-//gdp = display(5)
-// Giveing a referance to it as mdp - Tile Display.
-
-tdp = display(5)
-gfx = display(6)                      
-////////////////////////////////////////////////////////////
+//////////////////////////////
+//  Clases and Objects.   //
+//////////////////////////
+menu = {}
 aop = {}
+ui = {}
+player = {}
+grid = {}
+inv = {}
+/////////////////////////
+//   Player Class.   //
+/////////////////////
+player.name = ""
+player.gender = ""                
+player.age = 0                    
+player.height = 0                 
+player.race = ""                  
+// Point section.                 
+player.attackPoints = 1           
+player.defencePoints = 1          
+player.skillPoints = 0            
+// Player angles.                 
+player.faceing = "south"          
+// Player current wallet cash.    
+player.cash = 1000                
+// Player current bank balance. 
+player.bank = 0 
+/////////////////////////////////
+// inventory stats Section.  //
+/////////////////////////////
+//  Biodegradable fuel resources.
+inv.coal = 0
+inv.sticks = 0
+inv.leaves = 0
+// Liquids Resources.
+inv.freshWater = 0
+inv.SeaWater = 0
+inv.oil = 0
+// Gas Resouces.
+inv.nitrogenGas = 0
+inv.PropaneGas = 0
+// Ores.
+inv.ironOre = 0
+inv.goldOre = 0
+inv.dimondOre = 0
+// Stones.
+inv.mossStone = 0
+inv.sandStone = 0
+inv.cobbleStone = 0
+// Basic Materials.
+inv.stone = 0
+inv.sand = 0
+inv.dirt = 0
+inv.clay = 0
+// Bricks.
+inv.bricks = 0
+// Logs.
+inv.logs = 0
+//                PARTS SECTION.
+// Wood Parts
+inv.planks = 0
+inv.timber = 0
+// Iron parts.
+inv.nails = 0
+inv.screws = 0
+inv.plates = 0
+// Glass Parts.
+inv.glass = 0
+/////////////////////
+//   MAIN MENU   //
+/////////////////
+
+menu.startButton = function
+	start_b = new Sprite
+	start_b.image = file.loadImage("/usr/Assets/StartMenu/start.png")
+	start_b.x = 470; start_b.y = 430
+	start_b.localBounds = new Bounds 
+	start_b.localBounds.width = start_b.image.width 
+	start_b.localBounds.height = start_b.image.height
+	start_b.check_mouse = function
+		if self.contains(mouse) and mouse.button then
+			uidp.sprites.removeVal start_b
+			player_setup
+		end if
+	end function
+	uidp.sprites.push start_b
+end function
+
+menu.loadButton = function
+	loadb = new Sprite
+	loadb.image = file.loadImage("/usr/Assets/UiWidgets/inventoryicon.png")
+	loadb.x = 470; loadb.y = 600
+	loadb.localBounds = new Bounds 
+	loadb.localBounds.width = loadb.image.width 
+	loadb.localBounds.height = loadb.image.height
+	loadb.check_mouse = function
+		if self.contains(mouse) and mouse.button then
+			player_load
+		end if
+	end function
+end function
+menu.saveButton = function
+	saveb = new Sprite
+	saveb.image = file.loadImage("/usr/Assets/UiWidgets/inventoryicon.png")
+	saveb.x = 470; saveb.y = 600
+	saveb.localBounds = new Bounds 
+	saveb.localBounds.width = saveb.image.width 
+	saveb.localBounds.height = saveb.image.height
+	saveb.check_mouse = function
+		if self.contains(mouse) and mouse.button then
+			player_save
+		end if
+	end function
+end function
+menu.exitButton = function
+	exitb = new Sprite
+	exitb.image = file.loadImage("/usr/Assets/UiWidgets/inventoryicon.png")
+	exitb.x = 470; exitb.y = 600
+	exitb.localBounds = new Bounds 
+	exitb.localBounds.width = exitb.image.width 
+	exitb.localBounds.height = exitb.image.height
+	exitb.check_mouse = function
+		if self.contains(mouse) and mouse.button then
+			exit
+		end if
+	end function
+end function
+
+player_setup = function
+	new_name = input("Enter Your Name Here: ")
+	new_race = input("Race: Human?, Goblin?, Dwarf? ")
+	new_gender = input("Gender: Male? or Female? ")
+	new_height = input("Height in feet? ")
+	new_age = input("What is your Age? ")
+	text.clear
+	ui_load
+end function
+
+///////////////////////////////////////
+//   This is the map tile sheet.   //
+///////////////////////////////////
 aop.map = function
 	tdp.tileSet = file.loadImage("/usr/Assets/tile set.png")
 	tdp.tileSetTileSize = 64
@@ -42,8 +179,94 @@ aop.map = function
 	tdp.setCell 12, 9, 1
 	tdp.setCell 14, 9, 1
 end function
+//////////////////////////////////////////////////////
+//   This is the medium and small grid section.   //
+//////////////////////////////////////////////////
+grid.medium = function
+	//Outside Box - rectangle.
+	pdp.drawRect 0, 0, 960, 640
+	//14 Collums - lines.
+	pdp.line 64,0, 64,960
+	pdp.line 128,0, 128,960
+	pdp.line 192,0, 192,960
+	pdp.line 256,0, 256,960
+	pdp.line 320,0, 320,960
+	pdp.line 384,0, 384,960
+	pdp.line 448,0, 448,960
+	pdp.line 512,0, 512,960
+	pdp.line 576,0, 576,960
+	pdp.line 640,0, 640,960
+	pdp.line 704,0, 704,960
+	pdp.line 768,0, 768,960
+	pdp.line 832,0, 832,960
+	pdp.line 896,0, 896,960
+	// 9 Rows - lines.
+	pdp.line 0,64, 960,64
+	pdp.line 0,128, 960,128
+	pdp.line 0,192, 960,192
+	pdp.line 0,256, 960,256
+	pdp.line 0,320, 960,320
+	pdp.line 0,384, 960,384
+	pdp.line 0,448, 960,448
+	pdp.line 0,512, 960,512
+	pdp.line 0,576, 960,576
+end function
+grid.small = function
+	//Outside Box - rectangle.
+	pdp.drawRect 0, 0, 960, 640
+	//29 Collums - lines.
+	pdp.line 32,0, 32,960
+	pdp.line 64,0, 64,960
+	pdp.line 96,0, 96,960
+	pdp.line 128,0, 128,960
+	pdp.line 160,0, 160,960
+	pdp.line 192,0, 192,960
+	pdp.line 224,0, 224,960
+	pdp.line 256,0, 256,960
+	pdp.line 288,0, 288,960
+	pdp.line 320,0, 320,960
+	pdp.line 352,0, 352,960
+	pdp.line 384,0, 384,960
+	pdp.line 416,0, 416,960
+	pdp.line 448,0, 448,960
+	pdp.line 480,0, 480,960
+	pdp.line 512,0, 512,960
+	pdp.line 544,0, 544,960
+	pdp.line 576,0, 576,960
+	pdp.line 608,0, 608,960
+	pdp.line 640,0, 640,960
+	pdp.line 672,0, 672,960
+	pdp.line 704,0, 704,960
+	pdp.line 736,0, 736,960
+	pdp.line 768,0, 768,960
+	pdp.line 800,0, 800,960
+	pdp.line 832,0, 832,960
+	pdp.line 864,0, 864,960
+	pdp.line 896,0, 896,960
+	pdp.line 928,0, 928,960
+	// 19 Rows - lines.
+	pdp.line 0,32, 960,32
+	pdp.line 0,64, 960,64
+	pdp.line 0,96, 960,96
+	pdp.line 0,128, 960,128
+	pdp.line 0,160, 960,160
+	pdp.line 0,192, 960,192
+	pdp.line 0,224, 960,224
+	pdp.line 0,256, 960,256
+	pdp.line 0,288, 960,288
+	pdp.line 0,320, 960,320
+	pdp.line 0,352, 960,352
+	pdp.line 0,384, 960,384
+	pdp.line 0,416, 960,416
+	pdp.line 0,448, 960,448
+	pdp.line 0,480, 960,480
+	pdp.line 0,512, 960,512
+	pdp.line 0,544, 960,544
+	pdp.line 0,576, 960,576
+	pdp.line 0,608, 960,608
+end function
 
-ui = {}
+
 ui.main = function
 	health_bar_200 = new Sprite
 	health_bar_200.image = file.loadImage("/usr/Assets/UiWidgets/HealthBar/healthbar200.png")
@@ -149,24 +372,24 @@ ui.sgb = function
 	sgb.localBounds.height = sgb.image.height
 	sgb.check_mouse = function
 		if self.contains(mouse) and mouse.button then
-			grid.sg
+			grid.small
 		end if
 	end function
 	uidp.sprites.push sgb
 end function
-ui.bgb = function
-	bgb = new Sprite
-	bgb.image = file.loadImage("/usr/Assets/UiWidgets/biggridbutton.png")
-	bgb.x = 745; bgb.y = 70
-	bgb.localBounds = new Bounds 
-	bgb.localBounds.width = bgb.image.width 
-	bgb.localBounds.height = bgb.image.height
-	bgb.check_mouse = function
+ui.mgb = function
+	mgb = new Sprite
+	mgb.image = file.loadImage("/usr/Assets/UiWidgets/biggridbutton.png")
+	mgb.x = 745; mgb.y = 70
+	mgb.localBounds = new Bounds 
+	mgb.localBounds.width = mgb.image.width 
+	mgb.localBounds.height = mgb.image.height
+	mgb.check_mouse = function
 		if self.contains(mouse) and mouse.button then
-			grid.bg
+			grid.medium
 		end if
 	end function
-	uidp.sprites.push bgb
+	uidp.sprites.push mgb
 end function
 ui.lb = function
 	lb = new Sprite
@@ -243,15 +466,20 @@ ui.pstats = function
 	end function
 	uidp.sprites.push xbutton
 end function
-aop.map
-ui.main
-ui.lb
-ui.sgb
-ui.bgb
-ui.stb
-ui.pstatsb
-ui.sb
-ui.invb
+ui_load = function
+	aop.map
+	ui.main
+	ui.lb
+	ui.sgb
+	ui.mgb
+	ui.stb
+	ui.pstatsb
+	ui.sb
+	ui.invb
+end function
+menu.startButton
+
+
 while true
 	yield
 	for ui_item in uidp.sprites
