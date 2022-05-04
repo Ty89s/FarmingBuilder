@@ -2,14 +2,14 @@
 // Clearing the text display.   //
 ////////////////////////////////
 //text.clear
-/////////////////////////////////////
-//  Text display set to white.   //
-/////////////////////////////////
-text.color = color.white
 /////////////////////////
 // Imported files.   //
 /////////////////////
 import "listUtil"
+/////////////////////////////////////
+//  Text display set to white.   //
+/////////////////////////////////
+text.color = color.white
 /////////////////////////////////////////////
 // This is the display setting section.   //
 //////////////////////////////////////////
@@ -59,21 +59,26 @@ inv.sticks = 0
 inv.leaves = 0
 // Liquids Resources.
 inv.freshWater = 0
-inv.SeaWater = 0
+inv.seaWater = 0
 inv.oil = 0
 // Gas Resouces.
 inv.nitrogenGas = 0
-inv.PropaneGas = 0
+inv.propaneGas = 0
 // Ores.
+inv.copperOre = 0
 inv.ironOre = 0
 inv.goldOre = 0
 inv.dimondOre = 0
+// Smelted Ore
+inv.stealIngots = 0
+inv.copperIngots = 0
+inv.ironIngots = 0
 // Stones.
+inv.stone = 0
 inv.mossStone = 0
 inv.sandStone = 0
 inv.cobbleStone = 0
 // Basic Materials.
-inv.stone = 0
 inv.sand = 0
 inv.dirt = 0
 inv.clay = 0
@@ -81,20 +86,30 @@ inv.clay = 0
 inv.bricks = 0
 // Logs.
 inv.logs = 0
-//                PARTS SECTION.
+//                --(  PARTS SECTION.  )--                //
 // Wood Parts
 inv.planks = 0
 inv.timber = 0
 // Iron parts.
-inv.nails = 0
-inv.screws = 0
-inv.plates = 0
+inv.ironNail = 0
+inv.ironScrew = 0
+inv.ironBolt = 0
+inv.ironPlate = 0
+inv.ironBeam = 0
+inv.ironChains = 0
+inv.ironCable = 0
+// Copper Parts.
+inv.cooperNail = 0
+inv.copperScrew = 0
+inv.copperBolt = 0
+inv.copperPlate = 0
+inv.copperCable = 0
+inv.copperWire = 0
 // Glass Parts.
 inv.glass = 0
 /////////////////////
 //   MAIN MENU   //
 /////////////////
-
 menu.startButton = function
 	start_b = new Sprite
 	start_b.image = file.loadImage("/usr/Assets/StartMenu/start.png")
@@ -154,6 +169,8 @@ end function
 player_setup = function
 	new_name = input("Enter Your Name Here: ")
 	new_race = input("Race: Human?, Goblin?, Dwarf? ")
+	new_hair = input("Hair Color? ")
+	new_skin = input("Skin Color? ")
 	new_gender = input("Gender: Male? or Female? ")
 	new_height = input("Height in feet? ")
 	new_age = input("What is your Age? ")
@@ -179,6 +196,41 @@ aop.map = function
 	tdp.setCell 12, 9, 1
 	tdp.setCell 14, 9, 1
 end function
+
+aop.smallTree = function
+	stree = new Sprite
+	stree.image = file.loadImage("/usr/Assets/UiWidgets/playerstats.png")
+	stree.x = 95; stree.y = 600
+	stree.localBounds = new Bounds 
+	stree.localBounds.width = stree.image.width 
+	stree.localBounds.height = stree.image.height
+	stree.check_mouse = function
+		if self.contains(mouse) and mouse.button then
+			
+			//logs and sticks code to be added here
+			
+		end if
+	end function
+	uidp.sprites.push stree
+end function
+aop.mediumTree = function
+	mtree = new Sprite
+	mtree.image = file.loadImage("/usr/Assets/UiWidgets/playerstats.png")
+	mtree.x = 95; mtree.y = 600
+	mtree.localBounds = new Bounds 
+	mtree.localBounds.width = mtree.image.width 
+	mtree.localBounds.height = mtree.image.height
+	
+	mtree.check_mouse = function
+		if self.contains(mouse) and mouse.button then
+			
+			//logs and sticks code to be added here
+			
+		end if
+	end function
+	uidp.sprites.push mtree
+end function
+
 //////////////////////////////////////////////////////
 //   This is the medium and small grid section.   //
 //////////////////////////////////////////////////
