@@ -22,7 +22,6 @@ text = display(0)       //  Text Info.
 uidp = display(3)       //  Gui Info.
 //pdp = display(4)      //  Pixel Info.
 tdp = display(5)        //  Map Info
-
 //////////////////////////////
 //  Clases and Objects.   //
 //////////////////////////
@@ -483,7 +482,7 @@ ui.smallinv = function
 	smallinventory.image = file.loadImage("/usr/Assets/UiWidgets/smallinventory.png")
 	smallinventory.x = 200; smallinventory.y = 468
 	uidp.sprites.push smallinventory
-	
+	speed = 10
 	xbutton = new Sprite
 	xbutton.image = file.loadImage("/usr/Assets/UiWidgets/xbutton.png")
 	xbutton.x = 309; xbutton.y = 515
@@ -497,45 +496,56 @@ ui.smallinv = function
 		end if
 	end function
 	uidp.sprites.push xbutton
+	speed = 10
 end function
 ui.pstats = function
 	playerstats = new Sprite
 	playerstats.image = file.loadImage("/usr/Assets/UiWidgets/playerstat.png")
 	playerstats.x = 560; playerstats.y = 380
 	uidp.sprites.push playerstats
-	
-	xbutton = new Sprite
-	xbutton.image = file.loadImage("/usr/Assets/UiWidgets/xbutton.png")
-	xbutton.x = 740; xbutton.y = 520
-	xbutton.localBounds = new Bounds 
-	xbutton.localBounds.width = xbutton.image.width 
-	xbutton.localBounds.height = xbutton.image.height
-	xbutton.check_mouse = function()
-		if self.contains(mouse) and mouse.button then
-			uidp.sprites.removeVal xbutton
-			uidp.sprites.removeVal playerstats
-		end if
+	speed = 15
+	playerstats.check_mouse = function()
+		if playerstats.contains(mouse) and mouse.button then
+			dx = mouse.x - playerstats.x
+			dy = mouse.y - playerstats.y
+			dist = sqrt(dx*dx + dy*dy)
+			if dist < speed then dist = speed
+			xbutton.x = xbutton.x + dx * speed/dist
+			xbutton.y = xbutton.y + dy * speed/dist
+			playerstats.x = playerstats.x + dx * speed/dist
+			playerstats.y = playerstats.y + dy * speed/dist
+			if xbutton.contains(mouse) and mouse.button then
+				uidp.sprites.removeVal xbutton
+				uidp.sprites.removeVal playerstats
+			end if
+			yield
+		end function
+		xbutton = new Sprite
+		xbutton.image = file.loadImage("/usr/Assets/UiWidgets/xbutton.png")
+		xbutton.x = 740; xbutton.y = 520
+		xbutton.localBounds = new Bounds 
+		xbutton.localBounds.width = xbutton.image.width 
+		xbutton.localBounds.height = xbutton.image.height
+		uidp.sprites.push xbutton
 	end function
-	uidp.sprites.push xbutton
-end function
-ui_load = function
-	aop.map
-	ui.main
-	ui.lb
-	ui.sgb
-	ui.mgb
-	ui.stb
-	ui.pstatsb
-	ui.sb
-	ui.invb
-end function
-menu.startButton
-
-
-while true
-	yield
-	for ui_item in uidp.sprites
-		if not ui_item.hasIndex("check_mouse") then continue
-		ui_item.check_mouse
-	end for
-end while
+	ui_load = function
+		aop.map
+		ui.main
+		ui.lb
+		ui.sgb
+		ui.mgb
+		ui.stb
+		ui.pstatsb
+		ui.sb
+		ui.invb
+	end function
+	menu.startButton	
+	while true
+		yield
+		if mouse.button then
+			for ui_item in uidp.sprites
+				if not ui_item.hasIndex("check_mouse") then continue
+				ui_item.check_mouse	
+			end for
+		end if
+	end while
