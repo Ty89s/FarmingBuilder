@@ -2,6 +2,7 @@
 // Clearing the text display.   //
 ////////////////////////////////
 //text.clear
+text.color = color.white
 /////////////////////////
 // Imported files.   //
 /////////////////////
@@ -9,7 +10,7 @@ import "listUtil"
 /////////////////////////////////////
 //  Text display set to white.   //
 /////////////////////////////////
-text.color = color.white
+
 /////////////////////////////////////////////
 // This is the display setting section.   //
 //////////////////////////////////////////
@@ -27,10 +28,12 @@ tdp = display(5)        //  Map Info
 //////////////////////////
 menu = {}
 aop = {}
+grid = {}
 ui = {}
 player = {}
-grid = {}
 inv = {}
+craft = {}
+build = {}
 /////////////////////////
 //   Player Class.   //
 /////////////////////
@@ -87,8 +90,9 @@ inv.bricks = 0
 inv.logs = 0
 //                --(  PARTS SECTION.  )--                //
 // Wood Parts
-inv.planks = 0
-inv.timber = 0
+inv.woodenPlanks = 0
+inv.woodenTimber = 0
+inv.woodenSheet = 0
 // Iron parts.
 inv.ironNail = 0
 inv.ironScrew = 0
@@ -504,7 +508,8 @@ ui.pstats = function
 	playerstats.x = 560; playerstats.y = 380
 	uidp.sprites.push playerstats
 	speed = 15
-	playerstats.check_mouse = function()
+	
+	playerstats.check_mouse = function(inp)
 		if playerstats.contains(mouse) and mouse.button then
 			dx = mouse.x - playerstats.x
 			dy = mouse.y - playerstats.y
@@ -520,6 +525,7 @@ ui.pstats = function
 			end if
 			yield
 		end function
+		
 		xbutton = new Sprite
 		xbutton.image = file.loadImage("/usr/Assets/UiWidgets/xbutton.png")
 		xbutton.x = 740; xbutton.y = 520
